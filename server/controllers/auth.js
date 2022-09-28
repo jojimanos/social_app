@@ -2,6 +2,7 @@ const jwt = require('jsonwebtoken')
 const User = require('../models/user')
 const sendgrid = require('@sendgrid/mail');
 const { registerEmail } = require('../helpers/email');
+const shortId = require('shortid')
 
 sendgrid.setApiKey(process.env.SENDGRID_API_KEY);
 
@@ -36,5 +37,39 @@ exports.register = (req, res) => {
           message: `We could not verify your email. Please try again`
         })
       })
+  })
+}
+
+exports.registerActivate = (req, res) => {
+  const { token } = req.body
+  console.log(token)
+  jwt.verify(token, process.env.JWT_ACCOUNT_ACTIVATION, function (err, decoded) {
+    if (err) {
+      return res.status(401).json({
+        error: 'Expired link. Try again'
+      })
+    }
+
+    const { firstName, lastName, email, birthDate, password } = jwt.decode(token)
+    const username = shortId.generate()
+
+    User.findOne({email}).exec((err, user) => {
+      if(user) {
+        return res.status(401).json({
+          error: 'Email is taken'
+        })
+      }
+      const newUser = User({username, firstName, lastName, email, birthDate, password})
+      newUser.save((err, result) => {
+        if(err) {
+          return res.status(401).json({
+            error: 'Error saving user in database. Try later'
+          })
+        }
+        return res.json({
+          message: 'Registration success. Please login.'
+        })
+      })
+    })
   })
 }
