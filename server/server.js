@@ -24,6 +24,6 @@ app.listen(port, () => console.log(`API is running on port ${port}`));
 
 //mongoose
 mongoose
-.connect(process.env.DATABASE, {})
-.then(() => console.log("DB connected"))
-.catch((err) => console.log("DB Error => ", err));
+    .connect(process.env.DATABASE, {})
+    .then(() => console.log("DB connected"))
+    .catch((err) => console.log("DB Error => ", err));

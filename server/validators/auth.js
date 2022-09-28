@@ -16,5 +16,10 @@ exports.userRegisterValidator = [
     check('birthDate')
         .not()
         .isEmpty()
+        .withMessage('Birth date is required'),
+    check('password')
+        .not()
+        .isEmpty()
         .withMessage('Birth date is required')
+
 ]
