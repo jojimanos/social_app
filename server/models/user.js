@@ -3,7 +3,7 @@ const crypto = require('crypto');
 
 const userSchema = new mongoose.Schema(
     {
-        firstname: {
+        username: {
             type: String,
             trim: true,
             required: true,
@@ -12,7 +12,7 @@ const userSchema = new mongoose.Schema(
             index: true,
             lowercase: true
         },
-        lastname: {
+        firstName: {
             type: String,
             trim: true,
             required: true,
@@ -45,7 +45,7 @@ const userSchema = new mongoose.Schema(
 // virtual fields
 userSchema
     .virtual('password')
-    .set(function(password) {
+    .set(function (password) {
         // create temp variable called _password
         this._password = password;
         // generate salt
@@ -53,17 +53,17 @@ userSchema
         // encrypt password
         this.hashed_password = this.encryptPassword(password);
     })
-    .get(function() {
+    .get(function () {
         return this._password;
     });
 
 // methods > authenticate, encryptPassword, makeSalt
 userSchema.methods = {
-    authenticate: function(plainText) {
+    authenticate: function (plainText) {
         return this.encryptPassword(plainText) === this.hashed_password;
     },
 
-    encryptPassword: function(password) {
+    encryptPassword: function (password) {
         if (!password) return '';
         try {
             return crypto
@@ -75,7 +75,7 @@ userSchema.methods = {
         }
     },
 
-    makeSalt: function() {
+    makeSalt: function () {
         return Math.round(new Date().valueOf() * Math.random()) + '';
     }
 };

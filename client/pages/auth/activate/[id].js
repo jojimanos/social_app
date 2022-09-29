@@ -7,19 +7,20 @@ import { withRouter } from 'next/router';
 const ActivateAccount = ({ router }) => {
 
     const [state, setState] = useState({
-        name: '',
+        firstName: '',
+        password: '',
         token: '',
         buttonText: 'Activate Account',
         success: '',
         error: ''
     });
-    const { name, token, buttonText, success, error } = state;
+    const { firstName, token, buttonText, success, error } = state;
 
     useEffect(() => {
         let token = router.query.id;
         if (token) {
-            const { name } = jwt.decode(token);
-            setState({ ...state, name, token });
+            const { firstName } = jwt.decode(token);
+            setState({ ...state, firstName, token });
         }
     }, [router]);
 
@@ -29,9 +30,9 @@ const ActivateAccount = ({ router }) => {
         setState({ ...state, buttonText: 'Activating' });
 
         try {
-            const response = await axios.post(`http://localhost:8000/register/activate`, { token });
+            const response = await axios.post(`http://localhost:8000/api/register/activate`, { token });
             // console.log('account activate response', response)
-            setState({ ...state, name: '', token: '', buttonText: 'Activated', success: response.data.message });
+            setState({ ...state, firstName: '', token: '', buttonText: 'Activated', success: response.data.message });
         } catch (error) {
             setState({ ...state, buttonText: 'Activate Account', error: error.response.data });
         }
@@ -40,7 +41,7 @@ const ActivateAccount = ({ router }) => {
     return (
         <div className="row">
             <div className="col-md-6 offset-md-3">
-                <h1>G'day {name}, Ready to activate your account?</h1>
+                <h1>G'day {firstName}, Ready to activate your account?</h1>
                 <br />
                 {success && showSuccessMessage(success)}
                 {error && showErrorMessage(error)}

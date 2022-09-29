@@ -8,7 +8,7 @@ sendgrid.setApiKey(process.env.SENDGRID_API_KEY);
 
 exports.register = (req, res) => {
 
-  const { firstName, lastName, email, birthDate, password } = req.body
+  const { firstName, lastName, email, birthDate, password} = req.body
   //check if user exists in our db
   User.findOne(req.body.email).exec((err, user) => {
     if (user) {
@@ -41,35 +41,37 @@ exports.register = (req, res) => {
 }
 
 exports.registerActivate = (req, res) => {
-  const { token } = req.body
-  console.log(token)
-  jwt.verify(token, process.env.JWT_ACCOUNT_ACTIVATION, function (err, decoded) {
-    if (err) {
-      return res.status(401).json({
-        error: 'Expired link. Try again'
-      })
-    }
-
-    const { firstName, lastName, email, birthDate, password } = jwt.decode(token)
-    const username = shortId.generate()
-
-    User.findOne({email}).exec((err, user) => {
-      if(user) {
-        return res.status(401).json({
-          error: 'Email is taken'
-        })
-      }
-      const newUser = User({username, firstName, lastName, email, birthDate, password})
-      newUser.save((err, result) => {
-        if(err) {
+  const { token } = req.body;
+  console.log(token);
+  jwt.verify(token, process.env.JWT_ACCOUNT_ACTIVATION, function(err, decoded) {
+      if (err) {
           return res.status(401).json({
-            error: 'Error saving user in database. Try later'
-          })
-        }
-        return res.json({
-          message: 'Registration success. Please login.'
-        })
-      })
-    })
-  })
-}
+              error: 'Expired link. Try again'
+          });
+      }
+
+      const { firstName, email, password } = jwt.decode(token);
+      const username = shortId.generate();
+
+      User.findOne({ email }).exec((err, user) => {
+          if (user) {
+              return res.status(401).json({
+                  error: 'Email is taken'
+              });
+          }
+
+          // register new user
+          const newUser = new User({ username, firstName, email, password });
+          newUser.save((err, result) => {
+              if (err) {
+                  return res.status(401).json({
+                      error: 'Error saving user in database. Try later'
+                  });
+              }
+              return res.json({
+                  message: 'Registration success. Please login.'
+              });
+          });
+      });
+  });
+};
