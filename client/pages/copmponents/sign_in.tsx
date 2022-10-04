@@ -11,7 +11,7 @@ function Sign_in() {
             </button>
             or... Already have an account?
             <button>
-                <Link href={'../log_in_page'}>
+                <Link href={'../login'}>
                     Log In
                 </Link>
             </button>

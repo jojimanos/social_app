@@ -81,7 +81,7 @@ exports.login = (req, res) => {
   User.findOne({ email }).exec((err, user) => {
     if (err || !user) {
       return res.status(400).json({
-        error: 'Use with that email does not exist. Please register.'
+        error: 'User with that email does not exist. Please register.'
       })
     }
     if (!user.authenticate(password)) {
