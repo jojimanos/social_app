@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import Router from "next/router";
 import axios from 'axios'
+import { authenticate } from '../helpers/auth'
 
 function Login(): JSX.Element {
 
@@ -12,23 +13,23 @@ function Login(): JSX.Element {
     const [error, setError] = useState([] as any);
     const [buttonText, setButtonText] = useState("LOGIN")
 
-    const handleSubmit = (e: any) => {
+    const handleSubmit = async (e: any) => {
         e.preventDefault();
         setButtonText("Loging In")
 
-        axios
+        try {
+        const response = await axios
             .post(`http://localhost:8000/api/login`, {
                 email: email, password: password
             })
-            .then(response => {
-                    setEmail([]),
-                    setPassword([]), setButtonText('LOGIN'),
-                    setSuccess(response.data.message)
+        
+            authenticate(response, () => {
+
             })
-            .catch(error => {
-                setError(error.response.data),
+        }
+            catch (error) {
                     setButtonText('LOGIN')
-            });
+            };
     }
 
     return (
