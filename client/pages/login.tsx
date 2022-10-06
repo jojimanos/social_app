@@ -23,9 +23,7 @@ function Login(): JSX.Element {
                 email: email, password: password
             })
         
-            authenticate(response, () => {
-
-            })
+            authenticate(response, () => Router.push('/'))
         }
             catch (error) {
                     setButtonText('LOGIN')
