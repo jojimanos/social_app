@@ -1,6 +1,8 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import axios from 'axios'
+import {isAuth} from '../helpers/auth'
+import Router from "next/router";
 
 function Register(): JSX.Element {
 
@@ -12,6 +14,10 @@ function Register(): JSX.Element {
     const [success, setSuccess] = useState([] as any);
     const [error, setError] = useState([] as any);
     const [buttonText, setButtonText] = useState("REGISTER")
+    
+    useEffect(() => {
+        isAuth() && Router.push('/')
+    })
 
     const handleSubmit = (e: any) => {
         e.preventDefault();

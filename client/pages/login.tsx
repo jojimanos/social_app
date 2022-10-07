@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import Router from "next/router";
 import axios from 'axios'
-import { authenticate } from '../helpers/auth'
+import { authenticate, isAuth } from '../helpers/auth'
 
 function Login(): JSX.Element {
 
@@ -12,6 +12,10 @@ function Login(): JSX.Element {
     const [success, setSuccess] = useState([] as any);
     const [error, setError] = useState([] as any);
     const [buttonText, setButtonText] = useState("LOGIN")
+
+    useEffect(() => {
+        isAuth() && Router.push('/')
+    }, [])
 
     const handleSubmit = async (e: any) => {
         e.preventDefault();
@@ -23,7 +27,7 @@ function Login(): JSX.Element {
                 email: email, password: password
             })
         
-            authenticate(response, () => Router.push('/'))
+            authenticate(response, () => isAuth() && isAuth().role == 'admin' ? Router.push('/admin') : Router.push('/user'))
         }
             catch (error) {
                     setButtonText('LOGIN')
