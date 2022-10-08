@@ -4,6 +4,7 @@ import Link from "next/link";
 import Router from "next/router";
 import axios from 'axios'
 import { authenticate, isAuth } from '../helpers/auth'
+import Navbar from "./copmponents/navbar";
 
 function Login(): JSX.Element {
 
@@ -37,6 +38,7 @@ function Login(): JSX.Element {
     return (
         <form onSubmit={handleSubmit}>
             <div>
+                <Navbar/>
                 <p>{success && success || error && error}</p>
                 Please complete the following registration form:
                 <input required type="text" placeholder="email" value={email} onChange={(e) => setEmail(e.target.value)} />

@@ -3,6 +3,7 @@ import { useState } from "react";
 import axios from 'axios'
 import {isAuth} from '../helpers/auth'
 import Router from "next/router";
+import Navbar from "./copmponents/navbar";
 
 function Register(): JSX.Element {
 
@@ -42,6 +43,7 @@ function Register(): JSX.Element {
     return (
         <form onSubmit={handleSubmit}>
             <div>
+                <Navbar/>
                 <p>{success && success || error && error}</p>
                 Please complete the following registration form:
                 <input required type="text" placeholder="First Name" value={firstName} onChange={(e) => setFirstName(e.target.value)} />
