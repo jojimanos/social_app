@@ -3,6 +3,7 @@ const User = require('../models/user')
 const sendgrid = require('@sendgrid/mail');
 const { registerEmail } = require('../helpers/email');
 const shortId = require('shortid')
+const expressJwt = require('express-jwt')
 
 sendgrid.setApiKey(process.env.SENDGRID_API_KEY);
 
@@ -98,3 +99,5 @@ exports.login = (req, res) => {
     })
   })
 }
+
+exports.requireSignin = expressJwt({secret: process.env.JWT_SECRET })
