@@ -1,9 +1,9 @@
-const jwt = require('jsonwebtoken')
-const User = require('../models/user')
-const sendgrid = require('@sendgrid/mail');
+const jwt = require('jsonwebtoken');
+const expressJwt = require('express-jwt');
+const User = require('../models/user');
+const sendgrid = require('@sendgrid/mail');;
 const { registerEmail } = require('../helpers/email');
-const shortId = require('shortid')
-const expressJwt = require('express-jwt')
+const shortId = require('shortid');
 
 sendgrid.setApiKey(process.env.SENDGRID_API_KEY);
 
