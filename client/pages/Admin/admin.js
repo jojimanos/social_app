@@ -1,12 +1,12 @@
 import Navbar from '../copmponents/navbar'
+import withAdmin from '../withAdmin'
 
-const Admin = () => {
+const Admin = ({ user, token }) => {
 
-return (
-    <div>
-    <Navbar/>
-    <h1>Hello Admin</h1>
+    return <div>
+        <Navbar />
+        <p>{JSON.stringify(user, token)}</p>
     </div>
-)
+
 }
-export default Admin
+export default withAdmin(Admin)
