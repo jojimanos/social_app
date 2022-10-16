@@ -10,17 +10,15 @@ exports.userRegisterValidator = [
         .isEmpty()
         .withMessage('Last name is required'),
     check('email')
-        .not()
-        .isEmpty()
-        .withMessage('email is required'),
+        .isEmail()
+        .withMessage('must be a valid email address'),
     check('birthDate')
         .not()
         .isEmpty()
         .withMessage('Birth date is required'),
     check('password')
-        .not()
-        .isEmpty()
-        .withMessage('Birth date is required')
+        .isLength({ min: 6 })
+        .withMessage('Password must be at least 6 characters long')
 ]
 
 exports.userLoginValidator = [
@@ -32,4 +30,21 @@ exports.userLoginValidator = [
         .not()
         .isEmpty()
         .withMessage('Birth date is required')
+]
+
+exports.forgotPasswordValidator = [
+    check('email')
+        .not()
+        .isEmpty()
+        .withMessage('email is required'),
+]
+
+exports.resetPasswordValidator = [
+    check('newPassword')
+        .isLength({ min: 6 })
+        .withMessage('Password must be at least 6 characters long'),
+    check('resetPasswordLink')
+        .not()
+        .isEmpty()
+        .withMessage('Token is required')
 ]

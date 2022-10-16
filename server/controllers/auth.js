@@ -2,8 +2,9 @@ const jwt = require('jsonwebtoken');
 const expressJwt = require('express-jwt');
 const User = require('../models/user');
 const sendgrid = require('@sendgrid/mail');;
-const { registerEmail } = require('../helpers/email');
+const { registerEmail, forgotPasswordEmail } = require('../helpers/email');
 const shortId = require('shortid');
+const user = require('../models/user');
 
 sendgrid.setApiKey(process.env.SENDGRID_API_KEY);
 
@@ -25,7 +26,7 @@ exports.register = (req, res) => {
 
     sendgrid
       .send(register)
-      .then((response) => {
+      .then((response) => { 
         console.log(response[0].statusCode)
         console.log(response[0].headers)
         res.json({
@@ -134,3 +135,47 @@ exports.adminMiddleware = (req, res, next) => {
     next();
   });
 };
+
+exports.forgotPassword = (req, res) => {
+  const {email} = req.body
+  // check if user exists with that email
+  User.findOne({email}).exec((err, user) => {
+    if(err || !user) {
+      return res.status(400).json({
+        error: 'User with that email does not exist'
+        });
+    }
+    // generate token and email to user 
+    const token = jwt.sign({name: user.name}, process.env.JWT_RESET_PASSWORD, {expiresIn: '10m'})
+    // send email
+    const forgot = forgotPasswordEmail(firstName, lastName, email, birthDate, password, token)
+  
+    // populate the db > user > resetPasswordLink
+    return user.updateOne({resetPasswordLink: token}, (err, success) => {
+      if(err) {
+        return res.status(400).json({
+          error: 'Password reset failed. Try later.'
+        })
+      }
+      sendgrid
+      .send(forgot)
+      .then((response) => { 
+        console.log(response[0].statusCode)
+        console.log(response[0].headers)
+        res.json({
+          message: `Email has been sent to ${email}, Follow the instructions to reset your password`
+        })
+      })
+      .catch((error) => {
+        console.error(error)
+        res.json({
+          message: `We could not verify your email. Please try again`
+        })
+      })
+    })
+  })
+};
+
+exports.resetPassword = (req, res) => {
+  //
+}
