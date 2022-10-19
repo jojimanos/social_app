@@ -23,28 +23,31 @@ function Login(): JSX.Element {
         setButtonText("Loging In")
 
         try {
-        const response = await axios
-            .post(`http://localhost:8000/api/login`, {
-                email: email, password: password
-            })
-        
+            const response = await axios
+                .post(`http://localhost:8000/api/login`, {
+                    email: email, password: password
+                })
+
             authenticate(response, () => isAuth() && isAuth().role == 'admin' ? Router.push('/admin') : Router.push('/user'))
         }
-            catch (error) {
-                    setButtonText('LOGIN')
-            };
+        catch (error) {
+            setButtonText('LOGIN')
+        };
     }
 
     return (
         <form onSubmit={handleSubmit}>
             <div>
-                <Navbar/>
+                <Navbar />
                 <p>{success && success || error && error}</p>
                 Please complete the following registration form:
                 <input required type="text" placeholder="email" value={email} onChange={(e) => setEmail(e.target.value)} />
                 <input required type="text" placeholder="password" value={password} onChange={(e) => setPassword(e.target.value)} />
                 <button>{buttonText}</button>
             </div>
+            <Link href="/auth/password/forgot">
+                <a>Forgot Password</a>
+            </Link>
         </form>
     )
 }
