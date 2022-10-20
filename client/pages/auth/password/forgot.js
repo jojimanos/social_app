@@ -22,7 +22,7 @@ const forgotPassword = () => {
         e.preventDefault()
         //console.log('post email to', email)
         try {
-            const response = await axios.put("http://3000:/forgot-password", { email })
+            const response = await axios.put(`http://localhost:8000/api/forgot-password`, { email })
             console.log('FORGOT PASSWORD', response)
             setState({
                 ...state, email: '', buttonText: 'DONE', success: response.data.message
@@ -30,7 +30,7 @@ const forgotPassword = () => {
         } catch (error) {
             console.log('FORGOT PW ERROR', error)
             setState({
-                ...state, buttonText: 'Forgot Password', error: error.response.data.message
+                ...state, buttonText: 'Forgot Password', error: error.response.data
             })
         }
     }

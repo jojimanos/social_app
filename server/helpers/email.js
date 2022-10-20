@@ -32,7 +32,7 @@ exports.registerEmail = (firstName, lastName, email, birthDate, password, token)
 
 }
 
-exports.forgotPasswordEmail = (firstName, lastName, email, birthDate, password, token) => {
+exports.forgotPasswordEmail = (email, token) => {
   return {
 
       to: email, // Your email where you'll receive emails
@@ -54,7 +54,7 @@ exports.forgotPasswordEmail = (firstName, lastName, email, birthDate, password, 
          <div class="img-container" style="display: flex;justify-content: center;align-items: center;border-radius: 5px;overflow: hidden; font-family: 'helvetica', 'ui-sans';">
                </div>
                <div class="container" style="margin-left: 20px;margin-right: 20px;">
-               <h3>Έχετε ένα μήνυμα από τον/την ${firstName}, με e-mail: ✉️${email} και τηλέφωνο ${birthDate} και ${password, lastName}</h3>
+               <h3>Έχετε ένα μήνυμα από τον/την</h3>
                <div style="font-size: 16px;">
                <p>Please use the following link to complete your registration:</p>
                <p>${process.env.CLIENT_URL}/auth/password/reset/${token}</p>

@@ -149,7 +149,7 @@ exports.forgotPassword = (req, res) => {
     // generate token and email to user 
     const token = jwt.sign({ name: user.name }, process.env.JWT_RESET_PASSWORD, { expiresIn: '10m' })
     // send email
-    const forgot = forgotPasswordEmail(firstName, lastName, email, birthDate, password, token)
+    const forgot = forgotPasswordEmail(email, token)
 
     // populate the db > user > resetPasswordLink
     return user.updateOne({ resetPasswordLink: token }, (err, success) => {
@@ -202,12 +202,12 @@ exports.resetPassword = (req, res) => {
         user = _.extend(user, updatedFields)
 
         user.save((err, result) => {
-          if(err) {
+          if (err) {
             return res.status(400).json({
               error: 'Password reset failed. Try again.'
             })
           }
-          res.jaon({
+          res.json({
             message: 'Great! Now you can login with your new password.'
           })
         })
